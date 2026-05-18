@@ -383,3 +383,47 @@ def test_profile_string_metrics_to_pandas():
     assert row["min"] == 1
     assert row["max"] == 10
     assert row["mean"] == 5.0 + 1 / 3
+
+
+def test_report_to_markdown_basic(tmp_path):
+    path = tmp_path / "report.csv"
+
+    path.write_text("id,name\n" "1,Alice\n" "2,Bob\n")
+
+    report = ar.profile(ar.read_csv(path))
+
+    md = report.to_markdown()
+
+    assert "# Data Quality Report" in md
+    assert "## Overview" in md
+    assert "## Columns" in md
+    assert "| id | int64 | identifier |" in md
+
+
+def test_report_to_markdown_deterministic(tmp_path):
+    path = tmp_path / "stable.csv"
+
+    path.write_text("id,name\n" "1,Alice\n" "2,Bob\n")
+
+    report = ar.profile(ar.read_csv(path))
+
+    assert report.to_markdown() == report.to_markdown()
+
+
+def test_report_to_markdown_empty_sections():
+    report = ar.DataQualityReport(
+        row_count=0,
+        column_count=0,
+        memory_usage=0,
+        duplicate_rows=0,
+        duplicate_ratio=0.0,
+        columns={},
+        suggestions=[],
+    )
+
+    md = report.to_markdown()
+
+    assert "# Data Quality Report" in md
+    assert "## Overview" in md
+    assert "## Columns" not in md
+    assert "|---|---|" not in md

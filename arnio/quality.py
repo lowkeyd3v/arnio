@@ -112,6 +112,61 @@ class DataQualityReport:
             ],
         }
 
+    def to_markdown(self) -> str:
+        """Return a GitHub-friendly Markdown report."""
+
+        lines: list[str] = []
+
+        lines.append("# Data Quality Report")
+        lines.append("")
+
+        # Overview
+        lines.append("## Overview")
+        lines.append("")
+        lines.append(f"- Rows: {self.row_count}")
+        lines.append(f"- Columns: {self.column_count}")
+        lines.append(f"- Memory Usage: {self.memory_usage}")
+        lines.append(f"- Duplicate Rows: {self.duplicate_rows}")
+        lines.append(f"- Duplicate Ratio: {self.duplicate_ratio:.2%}")
+        lines.append("")
+
+        # Columns
+        if self.columns:
+            lines.append("## Columns")
+            lines.append("")
+
+            lines.append("| Name | Dtype | Semantic Type | Nulls | Unique | Warnings |")
+
+            lines.append("|---|---|---|---|---|---|")
+
+            for name in sorted(self.columns):
+                column = self.columns[name]
+
+                warnings = ", ".join(column.warnings) if column.warnings else "-"
+
+                lines.append(
+                    f"| {column.name} "
+                    f"| {column.dtype} "
+                    f"| {column.semantic_type} "
+                    f"| {column.null_count} "
+                    f"| {column.unique_count} "
+                    f"| {warnings} |"
+                )
+
+            lines.append("")
+
+        # Suggestions
+        if self.suggestions:
+            lines.append("## Suggested Cleaning Steps")
+            lines.append("")
+
+            for step, kwargs in self.suggestions:
+                lines.append(f"- `{step}`: `{kwargs}`")
+
+            lines.append("")
+
+        return "\n".join(lines)
+
     def summary(self) -> dict[str, Any]:
         """Return the highest-signal report fields."""
         return {
