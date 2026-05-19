@@ -94,6 +94,18 @@ clean, metadata = ar.pipeline(
 
 print(metadata["step_timings"])
 ```
+
+## Quick Example
+
+```python
+import arnio
+
+frame = arnio.read_csv("sample.csv")
+
+# Preview first 5 rows
+frame.preview(5)
+```
+
 ### Pipeline validation behavior
 
 Pipeline step specifications are validated before execution begins.
@@ -1462,3 +1474,4 @@ arnio/
 <sub>Built with C++ and pybind11 · Licensed under MIT · Maintained by <a href="https://github.com/im-anishraj">@im-anishraj</a></sub>
 
 </div>
+
