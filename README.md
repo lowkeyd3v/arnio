@@ -253,6 +253,8 @@ frame = ar.read_csv("data.csv", null_values=[])
 
 > Every step above executes in C++. Your Python code is a _configuration_ — not the execution engine.
 
+> Explore more in the **[examples/](./examples/)** folder — ready-to-run recipes for sales, customers, survey, logs, and finance datasets.
+
 <br>
 
 ### Security note: CSV formula injection
@@ -1546,7 +1548,7 @@ arnio/
 │   └── exceptions.py        # ArnioError, UnknownStepError, CsvReadError, TypeCastError
 ├── tests/                   # pytest suite — CSV, cleaning, pipeline, conversions
 ├── benchmarks/              # Reproducible arnio vs pandas benchmark
-├── examples/                # basic_usage.py, auto_clean_tutorial.py, custom_step.py
+├── examples/                # basic_usage.py, auto_clean_tutorial.py, custom_step.py and ready to run recipes for sales, customers, survey, logs, finance
 └── website/                 # Project website — arnio.vercel.app
 ```
 
